@@ -24,6 +24,19 @@ We have language bindings in Shell, Ruby, Python, JavaScript and PHP! You can vi
 
 # Posting
 
+Our main endpoint is */post*, which allows you to post to the STEEM blockchain. Here is the expected data format:
+
+<pre>POST /post</pre>
+
+<pre>
+{
+	"body": "The content of your posts",
+	"category": "category-name",
+	"title": "Title of your post!",
+	"metadata": {"metadata": "about your posts, tags .etc."}
+}
+</pre>
+
 > To make a post, use the following code:
 
 ```ruby
