@@ -11,9 +11,6 @@ language_tabs: # must be one of https://git.io/vQNgJ
 toc_footers:
   - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
 
-includes:
-  - errors
-
 search: true
 ---
 
@@ -112,7 +109,7 @@ req.write(JSON.stringify({ body: 'The content of your posts',
 req.end();
 ```
 
-```PHP
+```php
 <?php
 
 $curl = curl_init();
