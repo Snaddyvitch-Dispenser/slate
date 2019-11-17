@@ -8,6 +8,9 @@ language_tabs: # must be one of https://git.io/vQNgJ
   - python
   - javascript
   - php
+  
+toc_footers:
+    - [Get An API Key](https://getkey.steem.tools/guestposting)
 
 search: true
 ---
