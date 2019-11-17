@@ -2,14 +2,12 @@
 title: API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
+  - json
   - shell
   - ruby
   - python
   - javascript
   - php
-
-toc_footers:
-  - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
 
 search: true
 ---
@@ -24,44 +22,56 @@ We have language bindings in Shell, Ruby, Python, JavaScript and PHP! You can vi
 
 # Posting
 
+## Publish A Post
+
 Our main endpoint is */post*, which allows you to post to the STEEM blockchain. Here is the expected data format:
 
-<pre>POST /post</pre>
+> POST /post
 
-<pre>
+```json
 {
-	"body": "The content of your posts",
-	"category": "category-name",
-	"title": "Title of your post!",
-	"metadata": {"metadata": "about your posts, tags .etc."}
+    "body": "Content of your post....",
+    "category": "first-tag",
+    "title": "Title of the Post",
+    "metadata": {"anything": "that is metadata"},
+    "payout": "likwid",
+    "beneficiaries": {"cadawg": 10000},
+    "permlink": "not-the-final-permlink",
+    "tags": ["first-tag", "second-tag", "third-tag", "fourth-tag", "fifth-tag", "sixth-tag"],
+    "app": "GuestPosting",
+    "community": "GuestPosting/v0.0.1",
+    "user": "User Identifier",
+    "key": "Your Key Here"
 }
-</pre>
+```
 
-> To make a post, use the following code:
+> Ruby net/http:
 
 ```ruby
 require 'uri'
 require 'net/http'
 
-url = URI("http://137.117.82.107/post")
+url = URI("https://api.steem.tools/post")
 
 http = Net::HTTP.new(url.host, url.port)
 
 request = Net::HTTP::Post.new(url)
 request["Content-Type"] = 'application/json'
 request["Cache-Control"] = 'no-cache'
-request.body = "{\n\t\"body\": \"The content of your posts\",\n\t\"category\": \"category-name\",\n\t\"title\": \"Title of your post!\",\n\t\"metadata\": {\"metadata\": \"about your posts, tags .etc.\"}\n}"
+request.body = "{\r\n    \"body\": \"Content of your post....\",\r\n    \"category\": \"first-tag\",\r\n    \"title\": \"Title of the Post\",\r\n    \"metadata\": {\"anything\": \"that is metadata\"},\r\n    \"payout\": \"likwid\",\r\n    \"beneficiaries\": {\"cadawg\": 10000},\r\n    \"permlink\": \"not-the-final-permlink\",\r\n    \"tags\": [\"first-tag\", \"second-tag\", \"third-tag\", \"fourth-tag\", \"fifth-tag\", \"sixth-tag\"],\r\n    \"app\": \"GuestPosting\",\r\n    \"community\": \"GuestPosting/v0.0.1\",\r\n    \"user\": \"User Identifier\",\r\n    \"key\": \"Your Key Here\"\r\n}"
 
 response = http.request(request)
 puts response.read_body
 ```
 
+> Python Requests
+
 ```python
 import requests
 
-url = "http://137.117.82.107/post"
+url = "https://api.steem.tools/post"
 
-payload = "{\n\t\"body\": \"The content of your posts\",\n\t\"category\": \"category-name\",\n\t\"title\": \"Title of your post!\",\n\t\"metadata\": {\"metadata\": \"about your posts, tags .etc.\"}\n}"
+payload = "{\r\n    \"body\": \"Content of your post....\",\r\n    \"category\": \"first-tag\",\r\n    \"title\": \"Title of the Post\",\r\n    \"metadata\": {\"anything\": \"that is metadata\"},\r\n    \"payout\": \"likwid\",\r\n    \"beneficiaries\": {\"cadawg\": 10000},\r\n    \"permlink\": \"not-the-final-permlink\",\r\n    \"tags\": [\"first-tag\", \"second-tag\", \"third-tag\", \"fourth-tag\", \"fifth-tag\", \"sixth-tag\"],\r\n    \"app\": \"GuestPosting\",\r\n    \"community\": \"GuestPosting/v0.0.1\",\r\n    \"user\": \"User Identifier\",\r\n    \"key\": \"Your Key Here\"\r\n}"
 headers = {
     'Content-Type': "application/json",
     'Cache-Control': "no-cache"
@@ -72,55 +82,57 @@ response = requests.request("POST", url, data=payload, headers=headers)
 print(response.text)
 ```
 
+> Shell wget
+
 ```shell
 wget --quiet \
   --method POST \
   --header 'Content-Type: application/json' \
   --header 'Cache-Control: no-cache' \
-  --body-data '{\n	"body": "The content of your posts",\n	"category": "category-name",\n	"title": "Title of your post!",\n	"metadata": {"metadata": "about your posts, tags .etc."}\n}' \
+  --body-data '{\r\n    "body": "Content of your post....",\r\n    "category": "first-tag",\r\n    "title": "Title of the Post",\r\n    "metadata": {"anything": "that is metadata"},\r\n    "payout": "likwid",\r\n    "beneficiaries": {"cadawg": 10000},\r\n    "permlink": "not-the-final-permlink",\r\n    "tags": ["first-tag", "second-tag", "third-tag", "fourth-tag", "fifth-tag", "sixth-tag"],\r\n    "app": "GuestPosting",\r\n    "community": "GuestPosting/v0.0.1",\r\n    "user": "User Identifier",\r\n    "key": "Your Key Here"\r\n}' \
   --output-document \
-  - http://137.117.82.107/post
+  - https://api.steem.tools/post
 ```
+
+> Javascript Requests
 
 ```javascript
-var http = require("http");
+var request = require("request");
 
-var options = {
-  "method": "POST",
-  "hostname": [
-    "137",
-    "117",
-    "82",
-    "107"
-  ],
-  "path": [
-    "post"
-  ],
-  "headers": {
-    "Content-Type": "application/json",
-    "Cache-Control": "no-cache"
-  }
-};
+var options = { method: 'POST',
+  url: 'https://api.steem.tools/post',
+  headers: 
+   { 'Cache-Control': 'no-cache',
+     'Content-Type': 'application/json' },
+  body: 
+   { body: 'Content of your post....',
+     category: 'first-tag',
+     title: 'Title of the Post',
+     metadata: { anything: 'that is metadata' },
+     payout: 'likwid',
+     beneficiaries: { cadawg: 10000 },
+     permlink: 'not-the-final-permlink',
+     tags: 
+      [ 'first-tag',
+        'second-tag',
+        'third-tag',
+        'fourth-tag',
+        'fifth-tag',
+        'sixth-tag' ],
+     app: 'GuestPosting',
+     community: 'GuestPosting/v0.0.1',
+     user: 'User Identifier',
+     key: 'Your Key Here' },
+  json: true };
 
-var req = http.request(options, function (res) {
-  var chunks = [];
+request(options, function (error, response, body) {
+  if (error) throw new Error(error);
 
-  res.on("data", function (chunk) {
-    chunks.push(chunk);
-  });
-
-  res.on("end", function () {
-    var body = Buffer.concat(chunks);
-    console.log(body.toString());
-  });
+  console.log(body);
 });
-
-req.write(JSON.stringify({ body: 'The content of your posts',
-  category: 'category-name',
-  title: 'Title of your post!',
-  metadata: { metadata: 'about your posts, tags .etc.' } }));
-req.end();
 ```
+
+> PHP With cUrl
 
 ```php
 <?php
@@ -128,14 +140,27 @@ req.end();
 $curl = curl_init();
 
 curl_setopt_array($curl, array(
-  CURLOPT_URL => "http://137.117.82.107/post",
+  CURLOPT_URL => "https://api.steem.tools/post",
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => "",
   CURLOPT_MAXREDIRS => 10,
   CURLOPT_TIMEOUT => 30,
   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
   CURLOPT_CUSTOMREQUEST => "POST",
-  CURLOPT_POSTFIELDS => "{\n\t\"body\": \"The content of your posts\",\n\t\"category\": \"category-name\",\n\t\"title\": \"Title of your post!\",\n\t\"metadata\": {\"metadata\": \"about your posts, tags .etc.\"}\n}",
+  CURLOPT_POSTFIELDS => json_encode([
+    "body"=> "Content of your post....",
+    "category"=> "first-tag",
+    "title"=> "Title of the Post",
+    "metadata"=> ["anything"=> "that is metadata"],
+    "payout"=> "likwid",
+    "beneficiaries"=> ["cadawg"=> 10000],
+    "permlink"=> "not-the-final-permlink",
+    "tags"=> ["first-tag", "second-tag", "third-tag", "fourth-tag", "fifth-tag", "sixth-tag"],
+    "app"=> "GuestPosting",
+    "community"=> "GuestPosting/v0.0.1",
+    "user"=> "User Identifier",
+    "key"=> "Your Key Here"
+]),
   CURLOPT_HTTPHEADER => array(
     "Cache-Control: no-cache",
     "Content-Type: application/json"
@@ -154,13 +179,52 @@ if ($err) {
 }
 ```
 
+
+Parameter | Description
+--- | ---
+body | The content of your post in MarkDown/HTML/Text
+category | Category (First Tag) of the post
+title | Title of the post
+metadata | Any custom metadata (tags, app, community will be overwritten by later values)
+payout | The Payout method (always a string) - see below
+beneficiaries | A dictionary of {"name": value}, where value includes 2 decimals as integers (100% = 10000)
+permlink | Your part of the permalink that can be custom, we'll add the time and date of processing to make it unique (so make sure to use the link we return)
+tags | An array of tags
+app | The name of your app
+community | Typically App and version, separated by `/`, but can be any value.
+user (PRO Only) | A username/id for the guest who is posting to keep track of them and all their posts
+key (PRO Only) | The API Key that you obtained as described below (PRO keys are free and offer reduced fees, in exchange for linking an account to be responsible)
+
 <aside class="warning">
 If the API is busy, you may recieve an error due to all our accounts being in use. This is due to the fact that accounts can only post every 5 minuites.
 </aside>
 
+### Payout Methods:
+- 5050: Default Payout (50% STEEM & SBD, 50% SP)
+- powerup: 100% Powerup
+- likwid: Use likwid (1.5% fee) to recieve 100% liquid payout (100% STEEM/SBD)
+- decline: Decline Curation Rewards, Send your share to null
+- donate: 100% to our service as 5050
+- null: Allow curation rewards, your share of post rewards to null
+- steem.dao: Allow curation rewards, your share of post rewards to steem.dao
+
+<aside class="warning">
+If you want to do a custom payout between you and null or steem.dao, use the beneficiaries feature instead and choose your preferred payout above. Note: decline, donate, null and steem.dao all disable the "Beneficiaries" feature!
+</aside>
+
+### Pro Mode:
+
+To obtain a pro key, visit the [web portal](https://getkey.steem.tools/guestposting), login with SteemConnect/Keychain as specified
+
+Click "New Key" as arrowed below.
+
+![Link of new key](https://i.imgur.com/DUxGmze.png)
+
+Wait a few seconds, then the page will refresh. Copy the long string from a box (like the ones that are blurred out in the image above - you can have more than 1 key) and use that for the key field. And then you can use the key and user fields (both must be set for it to work).
+
 # Terms of Service
 
-Welcome to Guest Posting. These Terms of Service ("Terms") are a legal agreement between you and Steem Tools and related companies (the "Company", "us", "our", or "we") and you ("you" or "your"). By using this API, located at http://137.117.82.107/, which is collectively reffered to as the "Service" ("Service" or "Software"), You agree that you are over the age of majority in your judristriction or over, that you have read, understood and accept to be bound by the Terms.
+Welcome to Guest Posting. These Terms of Service ("Terms") are a legal agreement between you and Steem Tools and related companies (the "Company", "us", "our", or "we") and you ("you" or "your"). By using this API, located at https://api.steem.tools/, which is collectively reffered to as the "Service" ("Service" or "Software"), You agree that you are over the age of majority in your judristriction or over, that you have read, understood and accept to be bound by the Terms.
 
 1. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
@@ -178,6 +242,10 @@ Welcome to Guest Posting. These Terms of Service ("Terms") are a legal agreement
     develop, distribute, or publicly inform other members of "auto" software programs, "macro" software programs or other "cheat utility" software program or applications in violation of the applicable license agreements; or
   - exploit, distribute or publicly inform other members of any game error, miscue or bug which gives an unintended advantage; violate any applicable laws or regulations; or promote or encourage illegal activity including, but not limited to, hacking, cracking or distribution of counterfeit software, compromised accounts, or cheats or hacks for the Service.
 
-These rules of use are not meant to be exhaustive, and we reserve the right to determine what conduct we consider to be a violation of the Terms, Community Guidelines or improper use of the Service and to take action including termination of your Account and exclusion from further participation in the Service.
+4. These rules of use are not meant to be exhaustive, and we reserve the right to determine what conduct we consider to be a violation of the Terms, Community Guidelines or improper use of the Service and to take action including termination of your Account and exclusion from further participation in the Service.
 
-4. You are solely responsible for your interaction with other users of the Service and other parties that you come in contact with through the Service. The Company hereby disclaims any and all liability to you or any third party relating to your use of the Service. The Company reserves the right, but has no obligation, to manage disputes between you and other users of the Service.
+5. You are solely responsible for your interaction with other users of the Service and other parties that you come in contact with through the Service. The Company hereby disclaims any and all liability to you or any third party relating to your use of the Service. The Company reserves the right, but has no obligation, to manage disputes between you and other users of the Service.
+
+6. We may adjust the cut we take of a post at any time for any reason on either Anonymous or Pro accounts. Generally notice will be given for increases via the @guestaccounts account or any other means of contact, but they are not necessary. Examples of reasons we may change it include: Increased Operation Fees, Increased Spam/Low Quality Posts or Lower Post Rewards.
+
+7. We will log the following data upon a successful request: the input you provided, the output generated, the requester's ip address, (pro: the app's name, the username provided) and the time of the successful finished request! You agree we can store this data for an unlimited amount of time (due to the fact that STEEM posts are around forever, and can't be truly deleted).
