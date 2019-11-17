@@ -10,7 +10,7 @@ language_tabs: # must be one of https://git.io/vQNgJ
   - php
   
 toc_footers:
-    - [Get An API Key](https://getkey.steem.tools/guestposting)
+  - <a href="https://getkey.steem.tools/guestposting">Get An API Key</a>
 
 search: true
 ---
